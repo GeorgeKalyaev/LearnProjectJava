@@ -23,21 +23,21 @@ public class LoginPage extends BasePage {
         return this;
     }
 
-    public LoginPage enterPassword(String inputPassword){
+    public LoginPage enterPassword(String inputPassword) {
         driver.findElement(password).sendKeys(inputPassword);
         return this;
     }
 
-    public InventoryPage clickLogin(){
+    public InventoryPage clickLogin() {
         driver.findElement(loginButton).click();
         return new InventoryPage(driver);
     }
 
-    public boolean isErrorMessageDisplayed(){
+    public boolean isErrorMessageDisplayed() {
         return driver.findElement(errorMessage).isDisplayed();
     }
 
-    public String getTextErrorMessage(){
+    public String getTextErrorMessage() {
         return driver.findElement(errorMessage).getText();
     }
 
