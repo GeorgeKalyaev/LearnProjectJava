@@ -55,12 +55,13 @@ public class LoginTest {
         assertTrue(inventoryPage.getCurrentUrl().contains("inventory.html"), "url не содержит inventory.html");
     }
 
-    static Stream<Arguments> inValidData(){
+    static Stream<Arguments> inValidData() {
         return Stream.of(
                 arguments("Проверка неверного пароля", "standard_user", "qwerty"),
                 arguments("Проверка неверного логина", "qwerty", "secret_sauce")
         );
     }
+
     @ParameterizedTest
     @MethodSource("inValidData")
     void shouldLoginWithInvalidUserName(String description, String userName, String password) {
@@ -70,11 +71,29 @@ public class LoginTest {
                 .clickLogin();
 
         assertTrue(loginPage.isErrorMessageDisplayed(), "Сообщение об ошибки не появилось");
-        assertEquals("Epic sadface: Username and password do not match any user in this service",
-                loginPage.getTextErrorMessage(), "Неверный текст сообщения об ошибке");
+        assertEquals("Epic sadface: Username and password do not match any user in this service", loginPage.getTextErrorMessage(), "Неверный текст сообщения об ошибке");
     }
 
 //    новый тест - логин и пас пустые то и то проверять. и класть что то в корзину. еще нужно  выйти из аккаунта
+
+    static Stream<Arguments> inValidEmptyData() {
+        return Stream.of(
+                arguments("Проверка пустого пароля", "standard_user", "", "Epic sadface: Password is required"),
+                arguments("Проверка пустого логина", "", "secret_sauce", "Epic sadface: Username is required")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("inValidEmptyData")
+    void shouldLoginWithInvalidEmptyData(String description, String userName, String password, String expectedErrorMessage){
+        loginPage
+                .enterUserName(userName)
+                .enterPassword(password)
+                .clickLogin();
+        assertTrue(loginPage.isErrorMessageDisplayed(), "Сообщение об ошибки не появилось");
+        assertEquals(expectedErrorMessage, loginPage.getTextErrorMessage(), "Неверный текст сообщения об ошибке");
+        assertEquals(expectedErrorMessage, loginPage.getTextErrorMessage(), "Неверный текст сообщения об ошибке");
+    }
 
 //
 //    @Test
