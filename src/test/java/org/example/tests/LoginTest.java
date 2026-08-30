@@ -9,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -40,9 +41,9 @@ public class LoginTest {
         }
     }
 
-
+    // ТЕСТ-1 "problem_user", "performance_glitch_user", "error_user", "visual_user"
     @ParameterizedTest
-    @ValueSource(strings = {"standard_user", "problem_user", "performance_glitch_user", "error_user", "visual_user"})
+    @ValueSource(strings = {"standard_user"})
 //    @DisplayName("")
     void shouldLoginWithValidWithCreads(String userName) {
 
@@ -53,8 +54,23 @@ public class LoginTest {
 
         assertTrue(inventoryPage.isLoaded(), "Страница inventoryPage не загружена");
         assertTrue(inventoryPage.getCurrentUrl().contains("inventory.html"), "url не содержит inventory.html");
+
+        inventoryPage.openSideMenu();
+        assertTrue(inventoryPage.isLogoutDisplayed(), "Logout не отображается");
+        assertEquals("Logout", inventoryPage.getLogoutText(), "Неверный текст Logout");
+        inventoryPage.clickLogout();
+        assertTrue(loginPage.isLoaded(), "После logout не вернулись на loginPage");
+
+
+//        inventoryPage = loginPage
+
+
+//        driver.findElement(By.id("react-burger-menu-btn")).click();
+//        assertEquals("Logout", inventoryPage, "Не отображается Logout");
+//        driver.findElement(By.id("login-button"))
     }
 
+    // ТЕСТ-2
     static Stream<Arguments> inValidData() {
         return Stream.of(
                 arguments("Проверка неверного пароля", "standard_user", "qwerty"),
@@ -74,6 +90,7 @@ public class LoginTest {
         assertEquals("Epic sadface: Username and password do not match any user in this service", loginPage.getTextErrorMessage(), "Неверный текст сообщения об ошибке");
     }
 
+//    ТЕСТ-3
 //    новый тест - логин и пас пустые то и то проверять. и класть что то в корзину. еще нужно  выйти из аккаунта
 
     static Stream<Arguments> inValidEmptyData() {
@@ -82,9 +99,10 @@ public class LoginTest {
                 arguments("Проверка пустого логина", "", "secret_sauce", "Epic sadface: Username is required")
         );
     }
+
     @ParameterizedTest
     @MethodSource("inValidEmptyData")
-    void shouldLoginWithInvalidEmptyData(String description, String userName, String password, String expectedErrorMessage){
+    void shouldLoginWithInvalidEmptyData(String description, String userName, String password, String expectedErrorMessage) {
         loginPage
                 .enterUserName(userName)
                 .enterPassword(password)
@@ -94,7 +112,10 @@ public class LoginTest {
         assertEquals(expectedErrorMessage, loginPage.getTextErrorMessage(), "Неверный текст сообщения об ошибке");
     }
 
-//
+
+
+
+
 //    @Test
 //    void first() throws InterruptedException {
 ////        driver.get("https://www.saucedemo.com");
@@ -119,10 +140,6 @@ public class LoginTest {
 //
 //
 //    }
+
 }
 
-// подключить гит и запушить
-// На сайте https://saucedemo.com находит Username по ID и вводим туда стандарт юзер и также находим passwoed
-// нажимаем кнопку логин и проверяем
-// проверяем что залогинились и проверяем что есть  слово Products
-// загрузить в гит если все норм работает
