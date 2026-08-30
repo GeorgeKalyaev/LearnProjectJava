@@ -82,7 +82,6 @@ public class LoginTest {
                 arguments("Проверка пустого логина", "", "secret_sauce", "Epic sadface: Username is required")
         );
     }
-
     @ParameterizedTest
     @MethodSource("inValidEmptyData")
     void shouldLoginWithInvalidEmptyData(String description, String userName, String password, String expectedErrorMessage){
