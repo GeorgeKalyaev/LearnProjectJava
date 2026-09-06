@@ -1,4 +1,4 @@
-package org.example.pages;
+package org.example.ui.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -44,5 +44,11 @@ public class LoginPage extends BasePage {
         return driver.findElement(loginButton).isDisplayed();
     }
 
+    public InventoryPage authorization() {
+        driver.findElement(userName).sendKeys("standard_user");
+        driver.findElement(password).sendKeys("secret_sauce");
+        driver.findElement(loginButton).click();
+        return new InventoryPage(driver);
+    }
 
 }
